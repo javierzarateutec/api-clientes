@@ -1,0 +1,70 @@
+org: jazdutec
+service: api-clientes
+
+provider:
+  name: aws
+  runtime: python3.13
+  memorySize: 1024
+  timeout: 20
+  iam:
+    role: arn:aws:iam::767398011719:role/LabRole
+
+plugins:
+  - serverless-aws-documentation
+
+functions:
+  buscar:
+    handler: BuscarClientes.lambda_handler
+    events:
+      - http:
+          path: /cursos/buscar
+          method: post
+          cors: true
+          integration: lambda
+          documentation:
+            summary: "Buscar cliente"
+            description: "Permite buscar un cliente por su identificador único"
+            requestBody:
+              description: "Debe incluir el 'cliente_id' en el body del request"
+            requestModels:
+              "application/json": BuscarClienteRequest
+            methodResponses:
+              - statusCode: 200
+                responseBody:
+                  description: "Cliente encontrado"
+                responseModels:
+                  "application/json": ClienteModel
+
+custom:
+  documentation:
+    models:
+      - name: BuscarClienteRequest
+        contentType: "application/json"
+        schema:
+          type: object
+          required:
+            - cliente_id
+          properties:
+            cliente_id:
+              type: string
+              description: "Identificador del cliente (ej: CLI-001)"
+
+      - name: ClienteModel
+        contentType: "application/json"
+        schema:
+          type: object
+          properties:
+            cliente_id:
+              type: string
+            nombre:
+              type: string
+            correo:
+              type: string
+            telefono:
+              type: string
+            dni:
+              type: string
+            estado:
+              type: string
+            fech_registro:
+              type: string
