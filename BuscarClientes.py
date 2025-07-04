@@ -1,22 +1,21 @@
 import boto3
 from boto3.dynamodb.conditions import Key
+import json
 
 def lambda_handler(event, context):
-    # Entrada (cliente_id esperado en body como JSON string)
-    cliente_id = event['body']['cliente_id']
-    
-    # Inicializa DynamoDB
-    dynamodb = boto3.resource('dynamodb')
-    table = dynamodb.Table('tf_clientes')  # Usa el nombre correcto de tu tabla
+    # Parsear el body JSON que viene como string
+    body = json.loads(event['body'])  # ✅ esto convierte el string en un dict
+    cliente_id = body['cliente_id']   # ✅ ahora puedes acceder al campo
 
-    # Query por la clave de partición (cliente_id)
+    # Consultar en DynamoDB
+    dynamodb = boto3.resource('dynamodb')
+    table = dynamodb.Table('tf_clientes')
+
     response = table.query(
         KeyConditionExpression=Key('cliente_id').eq(cliente_id)
     )
 
-    items = response['Items']
-
     return {
         'statusCode': 200,
-        'body': items
+        'body': json.dumps(response['Items'])
     }
