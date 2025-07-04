@@ -7,13 +7,13 @@ def lambda_handler(event, context):
     if isinstance(body, str):
         body = json.loads(body)
 
-    curso_id = body["curso_id"]
+    curso_id = body["cliente_id"]
 
     dynamodb = boto3.resource("dynamodb")
-    table = dynamodb.Table("cursos")
+    table = dynamodb.Table("tf_cliente")
 
     response = table.query(
-        KeyConditionExpression=Key("curso_id").eq(curso_id)
+        KeyConditionExpression=Key("cliente_id").eq(curso_id)
     )
 
     return {
