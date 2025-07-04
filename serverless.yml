@@ -29,7 +29,7 @@ functions:
             requestModels:
               "application/json": BuscarClienteRequest
             methodResponses:
-              - statusCode: 200
+              - statusCode: "200"
                 responseBody:
                   description: "Cliente encontrado"
                 responseModels:
