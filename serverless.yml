@@ -37,6 +37,9 @@ functions:
 
 custom:
   documentation:
+    version: "v1"
+    title: "API de Clientes"
+    description: "API para gestionar clientes"
     models:
       - name: BuscarClienteRequest
         contentType: "application/json"
